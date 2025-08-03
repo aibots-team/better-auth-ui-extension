@@ -75,27 +75,25 @@ export function UpdateFieldCard({
             ? z.preprocess(
                   (val) => (!val ? undefined : Number(val)),
                   z.number({
-                      required_error: `${label} ${localization.IS_REQUIRED}`,
-                      invalid_type_error: `${label} ${localization.IS_INVALID}`
+                      message: `${label} ${localization.IS_REQUIRED}`
                   })
               )
             : z.coerce
                   .number({
-                      invalid_type_error: `${label} ${localization.IS_INVALID}`
+                      message: `${label} ${localization.IS_INVALID}`
                   })
                   .optional()
     } else if (type === "boolean") {
         fieldSchema = required
             ? z.coerce
                   .boolean({
-                      required_error: `${label} ${localization.IS_REQUIRED}`,
-                      invalid_type_error: `${label} ${localization.IS_INVALID}`
+                      message: `${label} ${localization.IS_REQUIRED}`
                   })
                   .refine((val) => val === true, {
                       message: `${label} ${localization.IS_REQUIRED}`
                   })
             : z.coerce.boolean({
-                  invalid_type_error: `${label} ${localization.IS_INVALID}`
+                  message: `${label} ${localization.IS_INVALID}`
               })
     } else {
         fieldSchema = required

@@ -186,28 +186,26 @@ export function SignUpForm({
                     ? z.preprocess(
                           (val) => (!val ? undefined : Number(val)),
                           z.number({
-                              required_error: `${additionalField.label} ${localization.IS_REQUIRED}`,
-                              invalid_type_error: `${additionalField.label} ${localization.IS_INVALID}`
+                              message: `${additionalField.label} ${localization.IS_REQUIRED}`
                           })
                       )
                     : z.coerce
                           .number({
-                              invalid_type_error: `${additionalField.label} ${localization.IS_INVALID}`
+                              message: `${additionalField.label} ${localization.IS_INVALID}`
                           })
                           .optional()
             } else if (additionalField.type === "boolean") {
                 fieldSchema = additionalField.required
                     ? z.coerce
                           .boolean({
-                              required_error: `${additionalField.label} ${localization.IS_REQUIRED}`,
-                              invalid_type_error: `${additionalField.label} ${localization.IS_INVALID}`
+                              message: `${additionalField.label} ${localization.IS_REQUIRED}`
                           })
                           .refine((val) => val === true, {
                               message: `${additionalField.label} ${localization.IS_REQUIRED}`
                           })
                     : z.coerce
                           .boolean({
-                              invalid_type_error: `${additionalField.label} ${localization.IS_INVALID}`
+                              message: `${additionalField.label} ${localization.IS_INVALID}`
                           })
                           .optional()
             } else {
@@ -352,11 +350,11 @@ export function SignUpForm({
             }
 
             const data = await authClient.signUp.email({
-                email,
-                password,
-                name: name || "",
-                ...(username !== undefined && { username }),
-                ...(image !== undefined && { image }),
+                email: String(email || ""),
+                password: String(password || ""),
+                name: String(name || ""),
+                ...(username !== undefined && { username: String(username) }),
+                ...(image !== undefined && { image: String(image) }),
                 ...additionalFieldValues,
                 callbackURL: getCallbackURL(),
                 fetchOptions
@@ -430,14 +428,12 @@ export function SignUpForm({
                                                         user={
                                                             avatarImage
                                                                 ? {
-                                                                      name:
-                                                                          form.watch(
-                                                                              "name"
-                                                                          ) ||
-                                                                          "",
-                                                                      email: form.watch(
+                                                                      name: String(form.watch(
+                                                                          "name"
+                                                                      ) || ""),
+                                                                      email: String(form.watch(
                                                                           "email"
-                                                                      ),
+                                                                      ) || ""),
                                                                       image: avatarImage
                                                                   }
                                                                 : null
@@ -521,6 +517,7 @@ export function SignUpForm({
                                         }
                                         disabled={isSubmitting}
                                         {...field}
+                                        value={String(field.value || "")}
                                     />
                                 </FormControl>
 
@@ -548,6 +545,7 @@ export function SignUpForm({
                                         }
                                         disabled={isSubmitting}
                                         {...field}
+                                        value={String(field.value || "")}
                                     />
                                 </FormControl>
 
@@ -573,6 +571,7 @@ export function SignUpForm({
                                     placeholder={localization.EMAIL_PLACEHOLDER}
                                     disabled={isSubmitting}
                                     {...field}
+                                    value={String(field.value || "")}
                                 />
                             </FormControl>
 
@@ -600,6 +599,7 @@ export function SignUpForm({
                                     disabled={isSubmitting}
                                     enableToggle
                                     {...field}
+                                    value={String(field.value || "")}
                                 />
                             </FormControl>
 
@@ -628,6 +628,7 @@ export function SignUpForm({
                                         disabled={isSubmitting}
                                         enableToggle
                                         {...field}
+                                        value={String(field.value || "")}
                                     />
                                 </FormControl>
 
@@ -708,6 +709,7 @@ export function SignUpForm({
                                                 }
                                                 disabled={isSubmitting}
                                                 {...formField}
+                                                value={String(formField.value || "")}
                                             />
                                         </FormControl>
 
