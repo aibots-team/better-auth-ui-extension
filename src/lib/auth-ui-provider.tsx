@@ -48,12 +48,15 @@ const DefaultLink: Link = ({ href, className, children }) => (
     </a>
 )
 
+// 浏览器扩展环境：自定义导航逻辑
 const defaultNavigate = (href: string) => {
-    window.location.href = href
+    // 在浏览器扩展中，我们使用自定义导航逻辑
+    console.log('Navigate to:', href);
 }
 
 const defaultReplace = (href: string) => {
-    window.location.replace(href)
+    // 在浏览器扩展中，我们使用自定义替换逻辑
+    console.log('Replace with:', href);
 }
 
 const defaultToast: RenderToast = ({ variant = "default", message }) => {

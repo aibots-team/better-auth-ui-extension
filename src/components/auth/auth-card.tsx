@@ -228,9 +228,10 @@ export function AuthCard({
                             isSubmitting={isSubmitting}
                             localization={localization}
                             otpSeparators={otpSeparators}
-                            pathname={pathname}
+                            pathname={undefined} // 浏览器扩展没有 pathname
                             redirectTo={redirectTo}
                             setIsSubmitting={setIsSubmitting}
+                            view={view} // 直接传递 view
                         />
 
                         {magicLink &&

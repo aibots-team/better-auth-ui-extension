@@ -77,73 +77,11 @@ export function AuthForm({
 
     localization = { ...contextLocalization, ...localization }
 
-    const path = pathname?.split("/").pop()
+    // 浏览器扩展环境：优先使用传入的 view，如果没有则使用默认值
+    view = view || "SIGN_IN"
 
-    useEffect(() => {
-        if (path && !getAuthViewByPath(viewPaths, path)) {
-            console.error(`Invalid auth view: ${path}`)
-            replace(`${basePath}/${viewPaths.SIGN_IN}${window.location.search}`)
-        }
-    }, [path, viewPaths, basePath, replace])
-
-    view = view || getAuthViewByPath(viewPaths, path) || "SIGN_IN"
-
-    // Redirect to appropriate view based on enabled features
-    useEffect(() => {
-        let isInvalidView = false
-
-        if (
-            view === "MAGIC_LINK" &&
-            (!magicLink || (!credentials && !emailOTP))
-        ) {
-            isInvalidView = true
-        }
-
-        if (
-            view === "EMAIL_OTP" &&
-            (!emailOTP || (!credentials && !magicLink))
-        ) {
-            isInvalidView = true
-        }
-
-        if (view === "SIGN_UP" && !signUpEnabled) {
-            isInvalidView = true
-        }
-
-        if (
-            !credentials &&
-            [
-                "SIGN_UP",
-                "FORGOT_PASSWORD",
-                "RESET_PASSWORD",
-                "TWO_FACTOR",
-                "RECOVER_ACCOUNT"
-            ].includes(view)
-        ) {
-            isInvalidView = true
-        }
-
-        if (
-            ["TWO_FACTOR", "RECOVER_ACCOUNT"].includes(view) &&
-            !twoFactorEnabled
-        ) {
-            isInvalidView = true
-        }
-
-        if (isInvalidView) {
-            replace(`${basePath}/${viewPaths.SIGN_IN}${window.location.search}`)
-        }
-    }, [
-        basePath,
-        view,
-        viewPaths,
-        credentials,
-        replace,
-        emailOTP,
-        signUpEnabled,
-        magicLink,
-        twoFactorEnabled
-    ])
+    // 浏览器扩展环境：移除路径重定向，直接使用传入的 view
+    // 如果需要验证 view 的有效性，可以在这里添加逻辑
 
     if (view === "SIGN_OUT") return <SignOut />
     if (view === "CALLBACK") return <AuthCallback redirectTo={redirectTo} />
