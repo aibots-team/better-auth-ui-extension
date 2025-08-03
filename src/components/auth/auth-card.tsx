@@ -149,7 +149,13 @@ export function AuthCard({
             }
             
             // 检查是否可以返回
-            setCanGoBack(navigationHistory.current.length > 1)
+            const canGoBackNow = navigationHistory.current.length > 1
+            setCanGoBack(canGoBackNow)
+            
+            // 调试信息
+            console.log('Navigation History:', navigationHistory.current)
+            console.log('Current View:', view)
+            console.log('Can Go Back:', canGoBackNow)
         }
     }, [view, basePath, viewPaths])
 
@@ -409,7 +415,7 @@ export function AuthCard({
                     )}
             </CardContent>
 
-            {credentials && signUp && (
+            {credentials && (
                 <CardFooter
                     className={cn(
                         "justify-center gap-1.5 text-muted-foreground text-sm",
@@ -462,16 +468,21 @@ export function AuthCard({
                             )}
                             onClick={() => {
                                 // 浏览器扩展环境：返回上一个页面
+                                console.log('Go Back clicked!')
+                                console.log('Navigation History before:', navigationHistory.current)
                                 if (navigationHistory.current.length > 1) {
                                     navigationHistory.current.pop() // 移除当前页面
                                     const previousPath = navigationHistory.current[navigationHistory.current.length - 1]
+                                    console.log('Previous Path:', previousPath)
                                     replace(previousPath)
                                 }
                             }}
                         >
                             {localization.GO_BACK}
                         </Button>
-                    ) : null}
+                    ) : (
+                        <span>Debug: canGoBack = {canGoBack.toString()}</span>
+                    )}
                 </CardFooter>
             )}
         </Card>
