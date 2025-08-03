@@ -1,7 +1,7 @@
 "use client"
 
 import { ArrowLeftIcon, Loader2 } from "lucide-react"
-import { type ReactNode, useContext, useEffect, useState } from "react"
+import { type ReactNode, useContext, useEffect, useState, useRef } from "react"
 
 import { useIsHydrated } from "../../hooks/use-hydrated"
 import { AuthUIContext } from "../../lib/auth-ui-provider"
@@ -88,6 +88,10 @@ export function AuthCard({
     otpSeparators = 0
 }: AuthCardProps) {
     const isHydrated = useIsHydrated()
+    
+    // 浏览器扩展环境：记住导航历史
+    const navigationHistory = useRef<string[]>([])
+    const [canGoBack, setCanGoBack] = useState(false)
 
     const {
         basePath,
@@ -133,6 +137,21 @@ export function AuthCard({
             window.removeEventListener("pagehide", handlePageHide)
         }
     }, [])
+
+    // 浏览器扩展环境：管理导航历史
+    useEffect(() => {
+        if (view) {
+            // 记录当前视图
+            const currentPath = `${basePath}/${viewPaths[view]}`
+            if (navigationHistory.current.length === 0 || 
+                navigationHistory.current[navigationHistory.current.length - 1] !== currentPath) {
+                navigationHistory.current.push(currentPath)
+            }
+            
+            // 检查是否可以返回
+            setCanGoBack(navigationHistory.current.length > 1)
+        }
+    }, [view, basePath, viewPaths])
 
     useEffect(() => {
         if (view === "SETTINGS" && settings?.url) replace(settings.url)
@@ -433,7 +452,7 @@ export function AuthCard({
                                     : localization.SIGN_IN}
                             </Button>
                         </Link>
-                    ) : (
+                    ) : canGoBack ? (
                         <Button
                             variant="link"
                             size="sm"
@@ -442,13 +461,17 @@ export function AuthCard({
                                 classNames?.footerLink
                             )}
                             onClick={() => {
-                                // 浏览器扩展环境：使用自定义导航
-                                replace("/auth/sign-in");
+                                // 浏览器扩展环境：返回上一个页面
+                                if (navigationHistory.current.length > 1) {
+                                    navigationHistory.current.pop() // 移除当前页面
+                                    const previousPath = navigationHistory.current[navigationHistory.current.length - 1]
+                                    replace(previousPath)
+                                }
                             }}
                         >
                             {localization.GO_BACK}
                         </Button>
-                    )}
+                    ) : null}
                 </CardFooter>
             )}
         </Card>
