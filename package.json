@@ -8,17 +8,17 @@
         "dev": "tsc-watch"
     },
     "type": "module",
-    "main": "./src/index.ts",
-    "module": "./src/index.ts",
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.js",
     "exports": {
         ".": {
             "import": {
-                "types": "./src/index.ts",
-                "default": "./src/index.ts"
+                "types": "./dist/index.d.ts",
+                "default": "./dist/index.js"
             },
             "require": {
-                "types": "./src/index.ts",
-                "default": "./src/index.ts"
+                "types": "./dist/index.d.cts",
+                "default": "./dist/index.cjs"
             }
         },
         "./server": {
