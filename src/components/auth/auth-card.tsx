@@ -441,7 +441,10 @@ export function AuthCard({
                                 "px-0 text-foreground underline",
                                 classNames?.footerLink
                             )}
-                            onClick={() => window.history.back()}
+                            onClick={() => {
+                                // 浏览器扩展环境：使用自定义导航
+                                replace("/auth/sign-in");
+                            }}
                         >
                             {localization.GO_BACK}
                         </Button>
