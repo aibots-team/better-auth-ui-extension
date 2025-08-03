@@ -5,8 +5,7 @@
     "description": "Plug & play shadcn/ui components for better-auth",
     "scripts": {
         "build": "tsup --clean --dts",
-        "dev": "tsc-watch",
-        "prepublishOnly": "rm -rf dist && turbo build"
+        "dev": "tsc-watch"
     },
     "type": "module",
     "main": "./dist/index.cjs",
